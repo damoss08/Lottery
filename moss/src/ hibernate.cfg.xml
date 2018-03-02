@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<property name="connection.driver_class">Drive Class Name</property>
+<property name="connection.url">connection URL</property>
+<property name="connection.user">connection User</property>
+<property name="connection.password">pass</property>
+
+<property name="show_sql">true</property>
+<property name="dialet">XXX</property>
+<property name="hbm2ddl.auto">update</property>

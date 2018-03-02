@@ -1,0 +1,18 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+
+import org.springframework.util.StringUtils;
+
+public class TestingClass {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeString = dailyThreeDailyLoad.dailyLoadOfDailyThreeDataReturnAsString("classpath:dailyThreeNumbers.txt");
+		
+		String[] lineParts = StringUtils.tokenizeToStringArray(dailyThreeString, "\n");
+		System.out.println("the value pulled = " + dailyThreeString);
+	}
+
+}

@@ -1,0 +1,19 @@
+package david.moss.load.utils;
+
+import java.sql.DriverManager;
+
+import com.mysql.jdbc.Connection;
+
+public class ConnectionMySQL {
+
+	public static void main(String[] args) {
+		try {
+			Connection conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/lottery", "root", "next2me2");
+			System.out.println("Connection Successful");
+		} catch (Exception e) {
+			System.out.println("Error found trying to access database: " + e.getMessage());
+		}
+
+	}
+
+}

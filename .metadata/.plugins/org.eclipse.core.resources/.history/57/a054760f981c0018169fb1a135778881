@@ -1,0 +1,5 @@
+package david.moss.load.utils;
+
+public class ConnectionMySQL {
+
+}

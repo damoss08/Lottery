@@ -1,0 +1,56 @@
+package david.moss.java.domain;
+
+import java.util.Date;
+
+public class DailyThree {
+
+	private String id;
+	private int firstPick;
+	private int secondPick;
+	private int thirdPick;
+	private Date dailyThreeDate;
+
+	public DailyThree() {
+		super();
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public int getFirstPick() {
+		return firstPick;
+	}
+
+	public void setFirstPick(int firstPick) {
+		this.firstPick = firstPick;
+	}
+
+	public int getSecondPick() {
+		return secondPick;
+	}
+
+	public void setSecondPick(int secondPick) {
+		this.secondPick = secondPick;
+	}
+
+	public int getThirdPick() {
+		return thirdPick;
+	}
+
+	public void setThirdPick(int thirdPick) {
+		this.thirdPick = thirdPick;
+	}
+
+	public Date getDailyThreeDate() {
+		return dailyThreeDate;
+	}
+
+	public void setDailyThreeDate(Date dailyThreeDate) {
+		this.dailyThreeDate = dailyThreeDate;
+	}
+}

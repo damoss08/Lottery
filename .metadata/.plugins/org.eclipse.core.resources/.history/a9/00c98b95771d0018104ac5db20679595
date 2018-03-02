@@ -1,0 +1,29 @@
+package david.moss.services;
+
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import david.moss.java.domain.DailyThree;
+import david.moss.load.utils.Conversion;
+import david.moss.load.utils.DailyThreeDailyLoad;
+import david.moss.load.utils.MySQLConnections;
+
+public class DailyThreeService {
+
+	public void loadDailyThreeData() throws SQLException
+	{
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeDataAsString = dailyThreeDailyLoad.loadDailyThreeDataFromFile();
+		Conversion conversion = new Conversion();
+		ArrayList<DailyThree> completeDailyThreeList = conversion.convertDailyThreeDataIntoArray(dailyThreeDataAsString);
+		System.out.println("Total pulls = " + completeDailyThreeList.size());
+		StoreDailyThreeDataInDB(completeDailyThreeList);
+	}
+
+	private void StoreDailyThreeDataInDB(ArrayList<DailyThree> completeDailyThreeList) throws SQLException {
+		MySQLConnections mySQLConnections = new MySQLConnections();
+		mySQLConnections.populateDatabaseDailyThree(completeDailyThreeList);
+	}
+
+}

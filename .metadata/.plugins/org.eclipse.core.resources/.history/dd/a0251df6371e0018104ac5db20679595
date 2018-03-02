@@ -1,0 +1,39 @@
+package david.moss.services;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import david.moss.java.domain.DailyThree;
+import david.moss.load.utils.Conversion;
+import david.moss.load.utils.DailyThreeDailyLoad;
+import david.moss.load.utils.MySQLConnections;
+
+public class DailyThreeService {
+
+	public void loadDailyThreeData() throws SQLException 
+	{
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeDataAsString = dailyThreeDailyLoad.loadDailyThreeDataFromFile();
+		Conversion conversion = new Conversion();
+		ArrayList<DailyThree> completeDailyThreeList = conversion.convertDailyThreeDataIntoArray(dailyThreeDataAsString);
+		System.out.println("Total pulls = " + completeDailyThreeList.size());
+		dailyThreeDailyLoad.storeDailyThreeDataInDB(completeDailyThreeList);
+	}
+	
+	public void loadSingleDayDataForDailyThree(String newEntry, String dateOfPull) throws SQLException
+	{
+		String theNumber = newEntry;
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		ArrayList<DailyThree> completeDailyThreeList = dailyThreeDailyLoad.loadSingleDailyThreeNumberReturnArray(theNumber, dateOfPull);
+		
+
+		System.out.println("Total pulls = " + completeDailyThreeList.size());
+		dailyThreeDailyLoad.storeDailyThreeDataInDB(completeDailyThreeList);
+	}
+
+	public int getAllOccurencesOfPreviouslyHitNumbers(String theNumber) throws SQLException {
+		MySQLConnections mySQLConnections = new MySQLConnections();
+		int hitsTotal = mySQLConnections.queryHowManyTimeNumberWasHit(theNumber);
+		return hitsTotal;
+	}
+}

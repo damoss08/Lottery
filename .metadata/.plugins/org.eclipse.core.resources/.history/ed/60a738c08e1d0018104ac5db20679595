@@ -1,0 +1,50 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import org.apache.cxf.helpers.FileUtils;
+import org.springframework.util.ResourceUtils;
+
+import david.moss.java.domain.DailyThree;
+
+public class DailyThreeDailyLoad {
+
+	public String dailyLoadOfDailyThreeDataReturnAsString(String classPathFileString) throws FileNotFoundException
+	{
+		return FileUtils.getStringFromFile(ResourceUtils.getFile(classPathFileString));
+	}
+	
+	public String loadDailyThreeDataFromFile() {
+		String dailyThreeDataReadIn = null;
+		
+		try {
+			DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+			dailyThreeDataReadIn = dailyThreeDailyLoad
+					.dailyLoadOfDailyThreeDataReturnAsString("classpath:dailyThreeNumbers.txt");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		return dailyThreeDataReadIn;
+	}
+	
+	public void storeDailyThreeDataInDB(ArrayList<DailyThree> completeDailyThreeList) throws SQLException {
+		MySQLConnections mySQLConnections = new MySQLConnections();
+		mySQLConnections.populateDatabaseDailyThree(completeDailyThreeList);
+	}
+
+	public ArrayList<DailyThree> loadSingleDailyThreeNumberReturnArray(String theNumber) {
+		ArrayList<DailyThree> singleDailyLoadDataArray = new ArrayList<DailyThree>();
+		String firstNumber = theNumber.substring(0, 1);
+		String secondNumber = theNumber.substring(1,2);
+		String thirdNumber = theNumber.substring(2,3);
+		DailyThree dailyThree = new DailyThree();
+		dailyThree.setFirstPick(Integer.parseInt(firstNumber));
+		dailyThree.setSecondPick(Integer.parseInt(secondNumber));
+		dailyThree.setThirdPick(Integer.parseInt(thirdNumber));
+		singleDailyLoadDataArray.add(dailyThree);
+		return singleDailyLoadDataArray;
+	}
+}

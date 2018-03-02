@@ -1,0 +1,28 @@
+package david.moss.load.utils;
+
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
+
+public class ConnectionMySQL {
+
+	public static void main(String[] args) {
+		try {
+			Connection conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/lottery", "root", "next2me2");
+			System.out.println("Connection Successful");
+			PreparedStatement statement = (PreparedStatement) conn.prepareStatement("select firstPick, secondPick, thirdPick from lottery.DailyThree");
+			ResultSet result = statement.executeQuery();
+			while (result.next())
+			{
+				System.out.println(" Daily Number: " + result.getString(1));
+			}
+			
+		} catch (Exception e) {
+			System.out.println("Error found trying to access database: " + e.getMessage());
+		}
+
+	}
+
+}

@@ -1,0 +1,65 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+import java.util.StringTokenizer;
+
+import sun.util.locale.StringTokenIterator;
+
+public class TestingClass {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeString = dailyThreeDailyLoad.dailyLoadOfDailyThreeDataReturnAsString("classpath:dailyThreeNumbers.txt");
+		
+//		System.out.println("the value pulled = " + dailyThreeString);
+		StringTokenizer st = new StringTokenizer(dailyThreeString, " ");
+		StringBuffer dailyPull = new StringBuffer();
+		String convertedDate = null;
+		while (st.hasMoreElements()){
+			String dataValue = (String) st.nextElement();
+			System.out.println("Value = " + dataValue);
+			if (dataValue.length() < 2) {
+				dailyPull.append(dataValue);
+				dailyPull.append(" ");
+			}
+			else
+			{
+				convertedDate = convertDailyDateValue(dataValue);
+			}
+			
+		}
+	}
+
+	private static String convertDailyDateValue(String dateToConvert) {
+		StringTokenizer st = new StringTokenizer(dateToConvert, "/");
+		StringBuffer buildString = new StringBuffer();
+		String stringValue = null;
+		int integerValue;
+		while (st.hasMoreElements())
+		{
+			
+			
+			
+			stringValue = (String) st.nextElement();
+
+			try {
+				integerValue = Integer.parseInt(stringValue);
+				buildString.append(integerValue);
+				buildString.append("/");
+			} catch (NumberFormatException e) {
+				String convertedDate = convertDate(stringValue);
+				buildString.append(convertedDate);
+			}
+
+
+		}
+		return null;
+	}
+
+	private static String convertDate(String stringValue) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,15 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+
+import org.apache.cxf.helpers.FileUtils;
+import org.springframework.util.ResourceUtils;
+
+public class DailyThreeDailyLoad {
+
+	public String dailyLoadOfDailyThreeDataReturnAsString(String classPathFileString) throws FileNotFoundException
+	{
+//		return FileUtils.getStringFromFile(ResourceUtils.getFile("classpath: dailyThreeNumbers.txt"));
+		return FileUtils.getStringFromFile(ResourceUtils.getFile("classpath: dailyThreeNumbers.txt"));
+	}
+}

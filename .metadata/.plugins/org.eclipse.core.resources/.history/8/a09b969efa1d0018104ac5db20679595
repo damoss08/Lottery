@@ -1,0 +1,17 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import david.moss.services.DailyThreeService;
+
+public class TestingClass {
+	
+	public static void main(String[] args) throws FileNotFoundException, SQLException {
+		DailyThreeService dailyThreeService = new DailyThreeService();
+//		dailyThreeService.loadDailyThreeData();
+//		dailyThreeService.loadSingleDayDataForDailyThree();
+		String theNumber = "408";
+		int hits = dailyThreeService.getAllOccurencesOfPreviouslyHitNumbers(theNumber);
+		System.out.println("Total times the number: " + theNumber + " came up is: " + hits);
+	}
+}

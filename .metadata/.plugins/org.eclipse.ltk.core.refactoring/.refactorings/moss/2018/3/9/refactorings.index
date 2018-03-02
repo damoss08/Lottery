@@ -1,0 +1,8 @@
+1519920791771	Rename field 'frontPar'
+1519920806510	Rename field 'backPar'
+1519922752252	Rename method 'populateDatabase'
+1519924258777	Extract method 'loadDailyThreeDataFromFile'
+1519924545627	Extract method 'convertDailyThreeDataIntoArray'
+1519924776516	Extract method 'StoreDailyThreeDataInDB'
+1519926008242	Rename method 'StoreDailyThreeDataInDB'
+1520016146134	Delete element

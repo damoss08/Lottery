@@ -1,0 +1,21 @@
+package david.moss.services;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import david.moss.java.domain.DailyThree;
+import david.moss.load.utils.Conversion;
+import david.moss.load.utils.DailyThreeDailyLoad;
+
+public class DailyThreeService {
+
+	public void loadDailyThreeData() throws SQLException 
+	{
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeDataAsString = dailyThreeDailyLoad.loadDailyThreeDataFromFile();
+		Conversion conversion = new Conversion();
+		ArrayList<DailyThree> completeDailyThreeList = conversion.convertDailyThreeDataIntoArray(dailyThreeDataAsString);
+		System.out.println("Total pulls = " + completeDailyThreeList.size());
+		dailyThreeDailyLoad.storeDailyThreeDataInDB(completeDailyThreeList);
+	}
+}

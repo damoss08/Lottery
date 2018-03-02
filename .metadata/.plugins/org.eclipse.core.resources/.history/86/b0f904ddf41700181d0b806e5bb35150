@@ -1,0 +1,22 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+import java.util.StringTokenizer;
+
+import sun.util.locale.StringTokenIterator;
+
+public class TestingClass {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeString = dailyThreeDailyLoad.dailyLoadOfDailyThreeDataReturnAsString("classpath:dailyThreeNumbers.txt");
+		
+//		System.out.println("the value pulled = " + dailyThreeString);
+		StringTokenizer st = new StringTokenizer(dailyThreeString, "\r");
+		while (st.hasMoreElements()){
+			System.out.println("Value = " + st.nextElement());
+		}
+	}
+
+}

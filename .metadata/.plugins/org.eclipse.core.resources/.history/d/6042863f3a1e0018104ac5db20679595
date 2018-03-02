@@ -1,0 +1,206 @@
+package david.moss.load.utils;
+
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.UUID;
+
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
+
+import david.moss.java.domain.DailyThree;
+
+public class MySQLConnections {
+
+	@SuppressWarnings("finally")
+	public Connection getConnection() {
+
+		Connection conn = null;
+		try {
+			conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/lottery", "root", "next2me2");
+			}
+		 catch (Exception e) {
+			System.out.println("Error found trying to access database: " + e.getMessage());
+		}
+		finally
+		{
+			return conn;
+		}
+		
+	}
+	
+	public ResultSet queryDatabase() {
+		ResultSet result = null;
+		Connection conn = null;
+		try {
+			conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/lottery", "root", "next2me2");
+			System.out.println("Connection Successful");
+			PreparedStatement statement = (PreparedStatement) conn
+					.prepareStatement("select firstPick, secondPick, thirdPick from lottery.DailyThree");
+			result = statement.executeQuery();
+			while (result.next()) {
+				System.out.println(" Daily Number: " + result.getString(1) + " " + result.getString(2) + " "
+						+ result.getString(3));
+			}
+
+		} catch (Exception e) {
+			System.out.println("Error found trying to access database: " + e.getMessage());
+		}
+
+		return result;
+	}
+
+	public void populateDatabaseDailyThree(ArrayList<DailyThree> completeDailyThreeList) throws SQLException {
+		
+		Connection dbConnection = null;
+		PreparedStatement preparedStatement = null;
+
+		String insertTableSQL = "INSERT INTO lottery.DailyThree"
+				+ "(dailyThreeUuid, firstPick, secondPick, thirdPick, theNumber, firstPair, backPair, dailyThreePickDate) VALUES"
+				+ "(?,?,?,?,?,?,?,?)";
+
+		Iterator<DailyThree> completeDailyThreeListIter = completeDailyThreeList.iterator();
+		DateFormat dateFormatYMD = new SimpleDateFormat("yyyy-mm-dd");
+		Date date = new Date(0);
+		
+		try {
+			dbConnection = getConnection();
+			preparedStatement = (PreparedStatement) dbConnection.prepareStatement(insertTableSQL);
+
+			dbConnection.setAutoCommit(false);
+
+			while (completeDailyThreeListIter.hasNext())
+			{
+				DailyThree dailyThree = completeDailyThreeListIter.next();
+				preparedStatement.setString(1,UUID.randomUUID().toString());
+				preparedStatement.setInt(2, dailyThree.getFirstPick());
+				preparedStatement.setInt(3, dailyThree.getSecondPick());
+				preparedStatement.setInt(4, dailyThree.getThirdPick());
+				StringBuffer sb = new StringBuffer();
+				sb.append(dailyThree.getFirstPick());
+				sb.append(dailyThree.getSecondPick());
+				sb.append(dailyThree.getThirdPick());
+				String theNumber = sb.toString();
+				preparedStatement.setString(5, theNumber);
+				sb = new StringBuffer();
+				sb.append(dailyThree.getFirstPick());
+				sb.append(dailyThree.getSecondPick());
+				String firstPair = sb.toString();
+				preparedStatement.setString(6, firstPair);
+				sb = new StringBuffer();
+				sb.append(dailyThree.getSecondPick());
+				sb.append(dailyThree.getThirdPick());
+				String backPair = sb.toString();
+				preparedStatement.setString(7, backPair);
+				preparedStatement.setDate(8, (java.sql.Date) dailyThree.getDailyThreeDate());
+				preparedStatement.addBatch();
+			}
+
+			preparedStatement.executeBatch();
+
+			dbConnection.commit();
+
+			System.out.println(completeDailyThreeList.size() + " records added to Daily Three table!");
+
+		} catch (SQLException e) {
+
+			System.out.println("Moss:  " + e.getMessage());
+			dbConnection.rollback();
+
+		} finally {
+
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+
+			if (dbConnection != null) {
+				dbConnection.close();
+			}
+
+		}
+		
+	}
+
+	public int queryHowManyTimeNumberWasHit(String theNumber) throws SQLException {
+		
+		Connection dbConnection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet result = null;
+		int totalCount = 0;
+
+		String insertTableSQL = "SELECT * FROM lottery.DailyThree where "
+				+ "theNumber = " + theNumber + " order by dailyThreePickDate desc";
+		
+		try {
+			dbConnection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/lottery", "root", "next2me2");
+			PreparedStatement statement = (PreparedStatement) dbConnection
+					.prepareStatement(insertTableSQL);
+
+			result = statement.executeQuery();
+			
+			while (result.next()) {
+				System.out.println(" Daily Number " + theNumber + " came out the following times: " + result.getString(8));
+				totalCount++;
+			}
+		} catch (SQLException e) {
+
+			System.out.println("Moss Rollback:  " + e.getMessage());
+			dbConnection.rollback();
+
+		} finally {
+
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+
+			if (dbConnection != null) {
+				dbConnection.close();
+			}
+
+		}
+		return totalCount;
+	}
+	
+	
+	public int deleteDailyThreeByDate(String theDate) throws SQLException {
+		
+		Connection dbConnection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet result = null;
+		int totalCount = 0;
+
+		String insertTableSQL = "DELETE FROM lottery.DailyThree where "
+				+ "lottery.DailyThree.dailyThreePickDate = " + theDate;
+		
+		try {
+			dbConnection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/lottery", "root", "next2me2");
+			PreparedStatement statement = (PreparedStatement) dbConnection
+					.prepareStatement(insertTableSQL);
+
+			statement.executeUpdate();
+			
+		} catch (SQLException e) {
+
+			System.out.println("Moss Rollback:  " + e.getMessage());
+			dbConnection.rollback();
+
+		} finally {
+
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+
+			if (dbConnection != null) {
+				dbConnection.close();
+			}
+
+		}
+		return totalCount;
+	}
+	
+}

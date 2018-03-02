@@ -1,0 +1,148 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import david.moss.java.domain.DailyThree;
+
+public class TestingClass {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeString = dailyThreeDailyLoad.dailyLoadOfDailyThreeDataReturnAsString("classpath:dailyThreeNumbers.txt");
+		convertDate(dailyThreeString);
+//		System.out.println("the value pulled = " + dailyThreeString);
+		StringTokenizer st = new StringTokenizer(dailyThreeString, " ");
+		StringBuffer dailyPull = new StringBuffer();
+		StringBuffer dailyMoss = new StringBuffer();
+		String convertedDate = null;
+		while (st.hasMoreElements()){
+			String dataValue = (String) st.nextElement();
+			System.out.println("Value = " + dataValue);
+			if (dataValue != null) {
+
+				convertedDate = convertDate(dataValue);
+			}
+			dailyMoss.append(convertedDate);
+		}
+	}
+
+	private static String convertDailyDateValue(String dateToConvert) {
+		StringTokenizer st = new StringTokenizer(dateToConvert, "/");
+		StringBuffer buildString = new StringBuffer();
+		String stringValue = null;
+		int integerValue;
+		boolean writeRecord = false;
+		while (st.hasMoreElements())
+		{
+			stringValue = (String) st.nextElement();
+
+			try {
+				integerValue = Integer.parseInt(stringValue);
+				buildString.append(integerValue);
+				buildString.append("/");
+			} catch (NumberFormatException e) {
+				String convertedDate = convertDate(stringValue);
+				buildString.append(convertedDate);
+				writeRecord = true;
+			}
+			if (writeRecord)
+			{
+				writeDailyData(buildString);
+			}
+		}
+		return null;
+	}
+
+	private static void writeDailyData(StringBuffer buildString) {
+		System.out.println("Date = " + buildString);
+		
+	}
+
+	private static String convertDate(String stringValue) {
+		StringBuffer formattedDate = new StringBuffer();
+		StringTokenizer st = new StringTokenizer(stringValue, "\n");
+		List<DailyThree> listofPulls = new ArrayList<DailyThree>();
+		boolean dateFound = false;
+		int numberCount = 0;
+		DailyThree dailyThree = new DailyThree();
+		while (st.hasMoreElements()){
+			String dateData = (String) st.nextElement();
+			if (stringValue.length() > 2)
+			{
+				
+				formattedDate.append(stringValue);
+				dateFound = true;
+				numberCount = 0;
+				dailyThree.setDailyThreeDate(new Date(stringValue));
+				
+			}
+			else if (numberCount == 1)
+			{
+				dailyThree.setFirstPick(Integer.parseInt(stringValue));
+			}
+			else if (numberCount == 2)
+			{
+				dailyThree.setSecondPick(Integer.parseInt(stringValue));
+				listofPulls.add(dailyThree);
+			}
+			else if (numberCount == 3) {
+				dailyThree.setThirdPick(Integer.parseInt(stringValue));
+				
+			}
+		}
+		System.out.println("Test");
+		return "";
+	}
+
+	private static String convertMonth(String dateData) {
+		String mm = "";
+		if (dateData.equalsIgnoreCase("January")) {
+			mm = "01";
+		}
+		else if (dateData.equalsIgnoreCase("February")) {
+			mm = "02";
+		}
+		else if (dateData.equalsIgnoreCase("March")) {
+			mm = "03";
+		}
+		else if (dateData.equalsIgnoreCase("April")) {
+			mm = "04";
+		}
+		else if (dateData.equalsIgnoreCase("May")) {
+			mm = "05";
+		}
+		else if (dateData.equalsIgnoreCase("June")) {
+			mm = "06";
+		}
+		else if (dateData.equalsIgnoreCase("July")) {
+			mm = "07";
+		}
+		else if (dateData.equalsIgnoreCase("August")) {
+			mm = "08";
+		}
+		else if (dateData.equalsIgnoreCase("September")) {
+			mm = "09";
+		}
+		else if (dateData.equalsIgnoreCase("October")) {
+			mm = "10";
+		}
+		else if (dateData.equalsIgnoreCase("November")) {
+			mm = "11";
+		}
+		else if (dateData.equalsIgnoreCase("December")) {
+			mm = "12";
+		}
+		else
+		{
+			mm = "99";
+		}
+		
+		return mm;
+	}
+
+}

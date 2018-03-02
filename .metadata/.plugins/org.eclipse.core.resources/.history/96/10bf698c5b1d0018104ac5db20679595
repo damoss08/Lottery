@@ -1,0 +1,82 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.StringTokenizer;
+import java.util.UUID;
+
+import com.mysql.jdbc.Connection;
+
+import david.moss.java.domain.DailyThree;
+
+public class TestingClass {
+	
+	public static void main(String[] args) throws FileNotFoundException, SQLException {
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeDataReadIn = dailyThreeDailyLoad
+				.dailyLoadOfDailyThreeDataReturnAsString("classpath:dailyThreeNumbers.txt");
+		ArrayList<DailyThree> completeDailyThreeList = convertDataReadInToArrayOfAllDailyThreePulls(
+				dailyThreeDataReadIn);
+		System.out.println("Total pulls = " + completeDailyThreeList.size());
+		MySQLConnections mySQLConnections = new MySQLConnections();
+		Connection conn = mySQLConnections.getConnection();
+		if (null != conn) mySQLConnections.populateDatabase(completeDailyThreeList);
+	}
+
+
+	@SuppressWarnings("deprecation")
+	private static ArrayList<DailyThree> convertDataReadInToArrayOfAllDailyThreePulls(String stringValue) {
+		StringTokenizer st = new StringTokenizer(stringValue, " ");
+		ArrayList<DailyThree> listofDailyThreePulls = new ArrayList<DailyThree>();
+		int numberCount = 0;
+		DailyThree dailyThreeDailyData = new DailyThree();
+		while (st.hasMoreElements()) {
+			String individualDataReadInFromDataString = (String) st.nextElement();
+			if (individualDataReadInFromDataString.length() > 2) {
+				String properlyFormattedDate = convertDateToProperFormat(individualDataReadInFromDataString);
+				dailyThreeDailyData.setDailyThreeDate((java.sql.Date.valueOf(properlyFormattedDate)));
+				numberCount = 0;
+			} else if (numberCount == 0) {
+				dailyThreeDailyData.setFirstPick(Integer.parseInt(individualDataReadInFromDataString));
+				numberCount++;
+			} else if (numberCount == 1) {
+				dailyThreeDailyData.setSecondPick(Integer.parseInt(individualDataReadInFromDataString));
+				numberCount++;
+			} else if (numberCount == 2) {
+				dailyThreeDailyData.setThirdPick(Integer.parseInt(individualDataReadInFromDataString));
+				dailyThreeDailyData.setId(UUID.randomUUID().toString());
+				listofDailyThreePulls.add(dailyThreeDailyData);
+				dailyThreeDailyData = new DailyThree();
+			}
+		}
+		return listofDailyThreePulls;
+	}
+
+
+	private static String convertDateToProperFormat(String individualDataReadInFromDataString) {
+		StringTokenizer st = new StringTokenizer(individualDataReadInFromDataString, "/");
+		int numberCnt = 0;
+		String mm = null, dd = null, yy = null;
+		while(st.hasMoreTokens())
+		{
+			if (numberCnt == 0)
+			{
+				mm = st.nextToken();
+				numberCnt++;
+			}
+			if (numberCnt == 1)
+			{
+				dd = st.nextToken();
+				numberCnt++;
+			}
+			if (numberCnt == 2)
+			{
+				yy = st.nextToken();
+			}
+		}
+		
+		return yy+"/"+mm+"/"+dd;
+	}
+}

@@ -1,0 +1,15 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+
+public class TestingClass {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeString = dailyThreeDailyLoad.dailyLoadOfDailyThreeDataReturnAsString("classpath:dailyThreeNumbers.txt");
+		
+		System.out.println("the value pulled = " + dailyThreeString);
+	}
+
+}

@@ -1,0 +1,71 @@
+package david.moss.java.domain;
+
+import java.util.Date;
+
+public class Powerball {
+	private int powerballPickOne;
+	private int powerballPickTwo;
+	private int powerballPickThree;
+	private int powerballPickFour;
+	private int powerballPickFive;
+	private int powerball;
+	private Date powerballDate;
+	
+	
+	
+	public Powerball(int powerballPickOne, int powerballPickTwo, int powerballPickThree, int powerballPickFour,
+			int powerballPickFive, int powerball, Date powerballDate) {
+		super();
+		this.powerballPickOne = powerballPickOne;
+		this.powerballPickTwo = powerballPickTwo;
+		this.powerballPickThree = powerballPickThree;
+		this.powerballPickFour = powerballPickFour;
+		this.powerballPickFive = powerballPickFive;
+		this.powerball = powerball;
+		this.powerballDate = powerballDate;
+	}
+	public int getPowerballPickOne() {
+		return powerballPickOne;
+	}
+	public void setPowerballPickOne(int powerballPickOne) {
+		this.powerballPickOne = powerballPickOne;
+	}
+	public int getPowerballPickTwo() {
+		return powerballPickTwo;
+	}
+	public void setPowerballPickTwo(int powerballPickTwo) {
+		this.powerballPickTwo = powerballPickTwo;
+	}
+	public int getPowerballPickThree() {
+		return powerballPickThree;
+	}
+	public void setPowerballPickThree(int powerballPickThree) {
+		this.powerballPickThree = powerballPickThree;
+	}
+	public int getPowerballPickFour() {
+		return powerballPickFour;
+	}
+	public void setPowerballPickFour(int powerballPickFour) {
+		this.powerballPickFour = powerballPickFour;
+	}
+	public int getPowerballPickFive() {
+		return powerballPickFive;
+	}
+	public void setPowerballPickFive(int powerballPickFive) {
+		this.powerballPickFive = powerballPickFive;
+	}
+	public int getPowerball() {
+		return powerball;
+	}
+	public void setPowerball(int powerball) {
+		this.powerball = powerball;
+	}
+	public Date getPowerballDate() {
+		return powerballDate;
+	}
+	public void setPowerballDate(Date powerballDate) {
+		this.powerballDate = powerballDate;
+	}
+	
+	
+}

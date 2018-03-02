@@ -1,0 +1,5 @@
+package david.moss.java.domain;
+
+public class Powerball {
+
+}

@@ -1,0 +1,28 @@
+package david.moss.services;
+
+import java.io.FileNotFoundException;
+
+import david.moss.load.utils.DailyThreeDailyLoad;
+
+public class DailyThreeService {
+
+	public void loadDailyThreeData()
+	{
+		String dailyThreeDataAsString = loadDailyThreeDataFromFile();
+	}
+
+	private String loadDailyThreeDataFromFile() {
+		String dailyThreeDataReadIn = null;
+		
+		try {
+			DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+			dailyThreeDataReadIn = dailyThreeDailyLoad
+					.dailyLoadOfDailyThreeDataReturnAsString("classpath:dailyThreeNumbers.txt");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return dailyThreeDataReadIn;
+	}
+}

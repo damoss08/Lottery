@@ -1,0 +1,63 @@
+package david.moss.load.utils;
+
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+import java.util.UUID;
+
+import david.moss.java.domain.DailyThree;
+
+public class Conversion {
+
+	@SuppressWarnings("deprecation")
+	public ArrayList<DailyThree> convertDataReadInToArrayOfAllDailyThreePulls(String stringValue) {
+		StringTokenizer st = new StringTokenizer(stringValue, " ");
+		ArrayList<DailyThree> listofDailyThreePulls = new ArrayList<DailyThree>();
+		int numberCount = 0;
+		DailyThree dailyThreeDailyData = new DailyThree();
+		while (st.hasMoreElements()) {
+			String individualDataReadInFromDataString = (String) st.nextElement();
+			if (individualDataReadInFromDataString.length() > 2) {
+				String properlyFormattedDate = convertDateToProperFormat(individualDataReadInFromDataString);
+				dailyThreeDailyData.setDailyThreeDate((java.sql.Date.valueOf(properlyFormattedDate)));
+				numberCount = 0;
+			} else if (numberCount == 0) {
+				dailyThreeDailyData.setFirstPick(Integer.parseInt(individualDataReadInFromDataString));
+				numberCount++;
+			} else if (numberCount == 1) {
+				dailyThreeDailyData.setSecondPick(Integer.parseInt(individualDataReadInFromDataString));
+				numberCount++;
+			} else if (numberCount == 2) {
+				dailyThreeDailyData.setThirdPick(Integer.parseInt(individualDataReadInFromDataString));
+				dailyThreeDailyData.setId(UUID.randomUUID().toString());
+				listofDailyThreePulls.add(dailyThreeDailyData);
+				dailyThreeDailyData = new DailyThree();
+			}
+		}
+		return listofDailyThreePulls;
+	}
+	
+	public static String convertDateToProperFormat(String individualDataReadInFromDataString) {
+		StringTokenizer st = new StringTokenizer(individualDataReadInFromDataString, "/");
+		int numberCnt = 0;
+		String mm = null, dd = null, yy = null;
+		while(st.hasMoreTokens())
+		{
+			if (numberCnt == 0)
+			{
+				mm = st.nextToken();
+				numberCnt++;
+			}
+			if (numberCnt == 1)
+			{
+				dd = st.nextToken();
+				numberCnt++;
+			}
+			if (numberCnt == 2)
+			{
+				yy = st.nextToken();
+			}
+		}
+		
+		return yy+"-"+mm+"-"+dd;
+	}
+}

@@ -1,0 +1,50 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.StringTokenizer;
+import java.util.UUID;
+
+import david.moss.java.domain.DailyThree;
+
+public class TestingClass {
+
+	private UUID uuid;
+	
+	public static void main(String[] args) throws FileNotFoundException {
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeDataReadIn = dailyThreeDailyLoad
+				.dailyLoadOfDailyThreeDataReturnAsString("classpath:dailyThreeNumbers.txt");
+		ArrayList<DailyThree> completeDailyThreeList = convertDataReadInToArrayOfAllDailyThreePulls(
+				dailyThreeDataReadIn);
+		System.out.println("Total pulls = " + completeDailyThreeList.size());
+	}
+
+	@SuppressWarnings("deprecation")
+	private static ArrayList<DailyThree> convertDataReadInToArrayOfAllDailyThreePulls(String stringValue) {
+		StringTokenizer st = new StringTokenizer(stringValue, " ");
+		ArrayList<DailyThree> listofDailyThreePulls = new ArrayList<DailyThree>();
+		int numberCount = 0;
+		DailyThree dailyThreeDailyData = new DailyThree();
+		while (st.hasMoreElements()) {
+			String individualDataReadInFromDataString = (String) st.nextElement();
+			if (individualDataReadInFromDataString.length() > 2) {
+				dailyThreeDailyData.setDailyThreeDate(new Date(individualDataReadInFromDataString));
+				numberCount = 0;
+			} else if (numberCount == 0) {
+				dailyThreeDailyData.setFirstPick(Integer.parseInt(individualDataReadInFromDataString));
+				numberCount++;
+			} else if (numberCount == 1) {
+				dailyThreeDailyData.setSecondPick(Integer.parseInt(individualDataReadInFromDataString));
+				numberCount++;
+			} else if (numberCount == 2) {
+				dailyThreeDailyData.setThirdPick(Integer.parseInt(individualDataReadInFromDataString));
+				dailyThreeDailyData.setId(UUID.randomUUID().toString());
+				listofDailyThreePulls.add(dailyThreeDailyData);
+				dailyThreeDailyData = new DailyThree();
+			}
+		}
+		return listofDailyThreePulls;
+	}
+}

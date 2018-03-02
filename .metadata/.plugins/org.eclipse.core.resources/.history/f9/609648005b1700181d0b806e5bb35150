@@ -1,0 +1,12 @@
+package david.moss.load.utils;
+
+public class DailyThreeDailyLoad {
+
+	public boolean dailyLoadOfDailyThreeData()
+	{
+		boolean dataloaded = false;
+		
+		
+		return dataloaded;
+	}
+}

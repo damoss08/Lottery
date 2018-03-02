@@ -1,0 +1,58 @@
+package david.moss.load.utils;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import david.moss.java.domain.DailyThree;
+
+public class TestingClass {
+
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		DailyThreeDailyLoad dailyThreeDailyLoad = new DailyThreeDailyLoad();
+		String dailyThreeString = dailyThreeDailyLoad.dailyLoadOfDailyThreeDataReturnAsString("classpath:dailyThreeNumbers.txt");
+		ArrayList<DailyThree> completeDailyThreeList = convertDate(dailyThreeString);
+		System.out.println("Total pulls = " + completeDailyThreeList.size());
+
+	}
+
+
+	@SuppressWarnings("deprecation")
+	private static ArrayList<DailyThree> convertDate(String stringValue) {
+		StringBuffer formattedDate = new StringBuffer();
+		StringTokenizer st = new StringTokenizer(stringValue, " ");
+		ArrayList<DailyThree> listofPulls = new ArrayList<DailyThree>();
+		int numberCount = 0;
+		DailyThree dailyThree = new DailyThree();
+		while (st.hasMoreElements()){
+			String dateData = (String) st.nextElement();
+			if (dateData.length() > 2)
+			{
+				
+				formattedDate.append(dateData);
+				numberCount = 0;
+				dailyThree.setDailyThreeDate(new Date(dateData));
+				
+			}
+			else if (numberCount == 0)
+			{
+				dailyThree.setFirstPick(Integer.parseInt(dateData));
+				numberCount++;
+			}
+			else if (numberCount == 1)
+			{
+				dailyThree.setSecondPick(Integer.parseInt(dateData));
+				numberCount++;
+			}
+			else if (numberCount == 2) {
+				dailyThree.setThirdPick(Integer.parseInt(dateData));
+				listofPulls.add(dailyThree);
+				dailyThree = new DailyThree();
+			}
+		}
+		return listofPulls;
+	}
+}
